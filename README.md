@@ -24,14 +24,38 @@ python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e '.[notebook,dev]'
 python -m linear_regression.data --download
+```
+
+The **main entry point** for the implemented linear-regression project is
+[linear_regression/run_experiment.py](linear_regression/run_experiment.py).
+With the environment activated and data downloaded, run it as a module from
+the repository root:
+
+```bash
 python -m linear_regression.run_experiment
-python -m pytest
+```
+
+This one command fits and evaluates all comparison models, runs the
+learning-rate and timing experiments, and saves all nine experiment artifacts
+to [linear_regression/results/](linear_regression/results/): four CSV files,
+four PNG figures, and one JSON metadata file. It also prints the evaluation
+metrics in the terminal. Running it again replaces those result files;
+measured runtimes can change. See the [module README](linear_regression/README.md#results)
+for the complete output list. This command runs without opening Jupyter.
+
+To reproduce the complete notebook, including its additional data exploration
+and full-data numerical reference, open it and select **Restart Kernel and Run
+All Cells**:
+
+```bash
 python -m jupyterlab linear_regression/analysis.ipynb
 ```
 
 In VS Code, select the project's `.venv` interpreter for both Python files and
 the notebook kernel. The notebook contains saved outputs, so its existing
 results can also be read without running training again.
+
+Run the correctness checks separately with `python -m pytest`.
 
 ## Repository layout
 

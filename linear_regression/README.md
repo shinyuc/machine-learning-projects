@@ -36,16 +36,27 @@ schema, aggregate statistics, and original experiment figures; it does not
 include a table of raw dataset rows. Attribution is provided for the data and
 does not itself grant redistribution rights.
 
-## Run
+## Main entry point: reproduce the experiment results
 
-From the repository root, with the environment installed as described in the
-root README:
+The main file is **[run_experiment.py](run_experiment.py)**. It calls the shared
+experiment in [experiments.py](experiments.py), which uses the core algorithms
+in [algorithms.py](algorithms.py).
+
+After installing the environment and acquiring the dataset as described
+above, activate the environment and run this command from the repository root
+(the directory containing `pyproject.toml`):
 
 ```bash
 python -m linear_regression.run_experiment
-python -m jupyterlab linear_regression/analysis.ipynb
-python -m pytest
 ```
+
+This command fits and evaluates least squares, mini-batch GD, SGD, the
+scikit-learn reference, and the mean baseline. It also runs the learning-rate
+comparison and fit-time benchmarks, prints the evaluation metrics, and writes
+all nine files listed under [Results](#results) to `linear_regression/results/`.
+Use the module command above so the package imports resolve correctly.
+No notebook session is needed to generate these files. Running the default
+command again replaces them; fit-time measurements vary between runs.
 
 To try a different configuration without replacing the checked-in results:
 
@@ -54,6 +65,20 @@ python -m linear_regression.run_experiment \
   --learning-rate 0.1 --epochs 500 --batch-size 20 \
   --output work/linear-regression-lr-0.1
 ```
+
+To reproduce **every notebook output**, including the additional data
+inspection, exploratory plots, and full-data numerical reference, open the
+notebook and select **Restart Kernel and Run All Cells**:
+
+```bash
+python -m jupyterlab linear_regression/analysis.ipynb
+```
+
+The notebook runs the same main experiment and exports the same nine result
+files in its final code cell. Its additional tables and exploratory plots
+appear inside the notebook. Save it after execution to retain those outputs.
+
+Run the correctness checks separately with `python -m pytest`.
 
 ## Experiment design
 
@@ -95,12 +120,20 @@ For scaled inputs z = (x - minimum) / scale, the original-unit coefficients are
 
 ## Results
 
-The notebook calculates and interprets the current run. The CLI saves:
+The command-line entry point saves the following files. The notebook displays
+and interprets the same main experiment results.
 
-- [metrics.csv](results/metrics.csv): error metrics and measured runtimes.
-- [coefficients.csv](results/coefficients.csv): coefficients in original units.
-- [metadata.json](results/metadata.json): dataset hash, split, settings, and versions.
-- Convergence and learning-rate CSVs, and four figures.
+| Output file | Contents |
+| --- | --- |
+| [metrics.csv](results/metrics.csv) | Training loss, held-out RMSE, MAE, R-squared, and measured fit times |
+| [coefficients.csv](results/coefficients.csv) | Model coefficients and intercepts in original feature units |
+| [convergence.csv](results/convergence.csv) | Mini-batch GD and SGD training loss at each epoch |
+| [learning_rates.csv](results/learning_rates.csv) | Training loss histories for learning rates 0.001, 0.01, and 0.1 |
+| [metadata.json](results/metadata.json) | Dataset hash, split indices, settings, and environment versions |
+| [convergence.png](results/convergence.png) | Training loss and distance to the least-squares optimum |
+| [learning_rates.png](results/learning_rates.png) | Training convergence for each learning rate |
+| [predictions.png](results/predictions.png) | Held-out predictions and residuals |
+| [runtime.png](results/runtime.png) | Median fit-time comparison |
 
 ![Training convergence](results/convergence.png)
 
