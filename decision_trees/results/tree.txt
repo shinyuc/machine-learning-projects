@@ -1,0 +1,6 @@
+split weather (n=108, fallback=walk)
+  [sunny] split wind (n=33, fallback=walk)
+    [calm] predict walk (n=17)
+    [strong] predict indoor (n=16)
+  [cloudy] predict walk (n=39)
+  [rainy] predict indoor (n=36)
