@@ -203,10 +203,65 @@ photographs, pixel arrays, per-image annotations, or trained weights are
 exported. Original dataset terms still govern local use. This repository's
 MIT and BSD licenses grant no rights to those images or annotations.
 
+## SMS text classification
+
+### Code and earlier example
+
+The earlier local MATLAB exercise followed MathWorks'
+[Classify Text Data Using Deep Learning](https://www.mathworks.com/help/deeplearning/ug/classify-text-data-using-deep-learning.html)
+and its sequence-model examples. Word embeddings, LSTM/BiLSTM comparison,
+learning-rate changes, and dense-head changes carry over as experiment themes.
+The earlier examples were reviewed to understand the task; no separate
+permissive source license was established for those local copies.
+
+This module uses the separately installed PyTorch
+[`nn.LSTM`](https://docs.pytorch.org/docs/stable/generated/torch.nn.LSTM.html)
+and `nn.Embedding` implementations, with this project's preprocessing,
+architecture definitions, training loop, and evaluation. It does not copy the
+MATLAB helpers or vendor a third-party Python tutorial. Scikit-learn supplies
+the TF-IDF and naive Bayes baseline. These libraries retain their own licenses;
+the new module's own contributions use the root MIT license. This is an
+implementation-history statement, not a clean-room claim or a license to
+redistribute MathWorks text, source files, or figures.
+
+### Dataset and version choice
+
+Almeida, T. & Hidalgo, J. (2011). *SMS Spam Collection* [Dataset].
+UCI Machine Learning Repository. https://doi.org/10.24432/C5CC84.
+
+The [official UCI page](https://archive.ics.uci.edu/dataset/228/sms+spam+collection)
+lists [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) as the dataset
+license (checked 2026-11-14). It is separate from the source-code MIT license.
+The downloader uses UCI's official archive, verifies the message-file SHA-256,
+and retains its original readme locally. That older readme identifies Almeida
+and Gomez Hidalgo as copyright holders and includes disclaimer/liability terms;
+it is not replaced or relabeled as MIT.
+
+The earlier local `spam.csv` has 5,572 rows and extra CSV columns. It overlaps
+substantially with the official 5,574-row text corpus, but is not byte-identical,
+and its exact redistribution source was not established. The accompanying
+`FactoryReportsDatasetLicense.txt` applies to the separate factory-report data,
+not to `spam.csv`. Neither that CSV nor the factory-report dataset is used or
+distributed by this Python module. Retraining uses the official UCI version.
+
+Processing changes are lowercase word/number tokenization, removal of normalized
+exact duplicates, a stratified train/validation/test split, and training-only
+feature fitting. Recurrent inputs retain the first 60 tokens and use padding;
+the TF-IDF baseline uses full normalized messages. These choices and the changed
+data version mean scores are not directly comparable to the earlier exercise.
+
+The local corpus can contain phone numbers, URLs, and personal text. The public
+module exports aggregate metrics, confusion counts, and plots only. Raw messages,
+the source CSV/archive/readme, learned vocabulary, word clouds, individual
+predictions, and trained weights are not included. This limits redistribution;
+it is not a claim that a data license grants every possible privacy or other
+right. The dataset attribution and license link remain even though raw records
+are not bundled. No author or institution endorses this project.
+
 ## Software dependencies
 
 The code imports NumPy, pandas, Matplotlib, scikit-learn, and Pillow; the neural
-module additionally uses the optional PyTorch dependency. Vehicle detection
+and text modules additionally use the optional PyTorch dependency. Vehicle detection
 also uses torchvision and SciPy, installed separately. Jupyter/IPython
 provides the notebook environment, and pytest provides the test runner.
 Dependencies are declared in `pyproject.toml` and the tested environment is
@@ -218,6 +273,6 @@ repository. Their respective upstream licenses continue to apply.
 ## Scope
 
 These notices describe the implemented linear-regression, decision-tree,
-SVM image-classification, neural-network, and object-detection modules. The
-text-classification module contains a planning description only; its data and
-code sources will be documented when it is implemented.
+SVM image-classification, neural-network, object-detection, and SMS
+text-classification modules. All six modules now include implementation and
+data-source documentation.

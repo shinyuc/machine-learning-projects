@@ -1,4 +1,4 @@
-# Python 3.12 environment for the five implemented modules, including PyTorch/torchvision.
+# Python 3.12 environment for all six implemented modules, including PyTorch/torchvision.
 anyio==4.16.0
 appnope==1.0.0
 argon2-cffi==25.1.0

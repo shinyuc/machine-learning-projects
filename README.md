@@ -12,7 +12,7 @@ and results.
 | [Vehicle classification](svm_vehicle_classification/README.md) | Handwritten HOG, scikit-learn linear/RBF SVC | Implemented |
 | [Neural network classification](neural_network_classification/README.md) | PyTorch MLP/CNN, activation and BatchNorm comparisons | Implemented |
 | [Object detection](object_detection/README.md) | SqueezeNet + YOLOv3, augmentation, AP50 | Implemented |
-| [Text classification](text_classification/README.md) | LSTM and BiLSTM text classification | Planned |
+| [Text classification](text_classification/README.md) | TF-IDF baseline, LSTM/BiLSTM SMS spam classification | Implemented |
 
 ## Start with linear regression
 
@@ -150,6 +150,33 @@ original real images locally, with exact duplicates kept in the same split.
 python -m jupyterlab object_detection/analysis.ipynb
 ```
 
+## Run the SMS text-classification project
+
+The main entry point is [text_classification/run_experiment.py](text_classification/run_experiment.py):
+
+```bash
+python -m pip install -e '.[neural,notebook,dev]'
+python -m text_classification.data --download
+python -m text_classification.run_experiment
+```
+
+This downloads the attributed UCI SMS Spam Collection into a Git-ignored local
+folder, removes normalized exact duplicates, and compares majority/TF-IDF
+baselines with four LSTM/BiLSTM configurations. All models share one fixed
+train/validation/test partition; vocabulary and IDF fitting use training text only.
+The main command saves eight aggregate artifacts, with no real SMS excerpts,
+phone numbers, vocabulary, or model weights. See the
+[module README](text_classification/README.md) for results and source/license details.
+
+```bash
+python -m jupyterlab text_classification/analysis.ipynb
+```
+
+The [executed notebook](text_classification/analysis.ipynb) explains sequence
+shapes, embeddings, padding, LSTM/BiLSTM comparison, and the importance of spam
+precision/recall/F1. It reads saved results by default and supports optional
+local retraining through the same Python code.
+
 ## Repository layout
 
 ```text
@@ -190,7 +217,13 @@ object_detection/
   run_experiment.py   # Main entry point: train four comparisons, evaluate, save
   analysis.ipynb      # Executed aggregate analysis; optional local retraining
   results/            # Seven summaries/figures, no photos or annotations
-text_classification/  # Planned
+text_classification/
+  data.py             # UCI download, deduplication, splits, train-only vocabulary
+  models.py           # Word embeddings, LSTM/BiLSTM and dense classification heads
+  training.py         # Adam updates and validation spam-F1 checkpoint selection
+  run_experiment.py   # Main entry point: six fixed comparisons and held-out scores
+  analysis.ipynb      # Executed explanations, invented examples, aggregate results
+  results/            # Eight summaries/figures, no raw SMS or learned vocabulary
 tests/                # Numerical correctness and data-boundary tests
 pyproject.toml        # Dependencies and package configuration
 data/                 # Local downloaded data, ignored by Git

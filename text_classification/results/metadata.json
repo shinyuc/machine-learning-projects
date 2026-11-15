@@ -1,0 +1,132 @@
+{
+  "data_source": "UCI SMS Spam Collection, official text version",
+  "citation": "Almeida, T. & Hidalgo, J. (2011). SMS Spam Collection. UCI Machine Learning Repository.",
+  "source_url": "https://doi.org/10.24432/C5CC84",
+  "download_url": "https://archive.ics.uci.edu/static/public/228/sms+spam+collection.zip",
+  "data_license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "data_sha256": "7d039a24a6083ed9ef0f806ebad56bbb976e3aeb8de05669173bfdc4996c239d",
+  "source_rows": 5574,
+  "source_class_counts": {
+    "ham": 4827,
+    "spam": 747
+  },
+  "duplicates_removed": 444,
+  "unique_messages": 5130,
+  "deduplication": "lowercase Unicode word tokens joined with spaces; keep first",
+  "split_rule": "stratified 70/15/15 after normalized exact deduplication; fixed seed",
+  "split_counts": {
+    "train": 3590,
+    "validation": 770,
+    "test": 770
+  },
+  "class_counts": {
+    "train": {
+      "ham": 3149,
+      "spam": 441
+    },
+    "validation": {
+      "ham": 676,
+      "spam": 94
+    },
+    "test": {
+      "ham": 676,
+      "spam": 94
+    }
+  },
+  "train_length_histogram": {
+    "bin_edges": [
+      0,
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      100,
+      200
+    ],
+    "counts": [
+      1329,
+      1114,
+      765,
+      307,
+      29,
+      17,
+      25,
+      4
+    ]
+  },
+  "train_messages_over_60_tokens": 27,
+  "seed": 42,
+  "device": "cpu",
+  "torch_threads": 1,
+  "epochs": 5,
+  "batch_size": 16,
+  "embedding_size": 50,
+  "hidden_size_per_direction": 80,
+  "max_length": 60,
+  "max_vocabulary_words": 10000,
+  "vocabulary_size_including_reserved": 7250,
+  "preprocessing": "train-only vocabulary; first 60 tokens; right padding; packed LSTM; empty/unknown -> UNK",
+  "tfidf": {
+    "max_features": 10000,
+    "ngram_range": [
+      1,
+      2
+    ],
+    "alpha": 1.0,
+    "features_fitted": 10000
+  },
+  "optimizer": "Adam",
+  "gradient_clip_norm": 2.0,
+  "pretrained_embeddings": false,
+  "class_weighting": "none",
+  "prediction_rule": "argmax (ham on an exact tie); no threshold tuning",
+  "selection_rule": "maximum validation spam F1; earliest epoch/configuration on exact ties",
+  "selected_model": "LSTM baseline",
+  "experiments": [
+    {
+      "name": "LSTM baseline",
+      "learning_rate": 0.01,
+      "head_sizes": [
+        10
+      ],
+      "bidirectional": false
+    },
+    {
+      "name": "LSTM lower learning rate",
+      "learning_rate": 0.001,
+      "head_sizes": [
+        10
+      ],
+      "bidirectional": false
+    },
+    {
+      "name": "LSTM deeper head",
+      "learning_rate": 0.001,
+      "head_sizes": [
+        30,
+        10
+      ],
+      "bidirectional": false
+    },
+    {
+      "name": "BiLSTM deeper head",
+      "learning_rate": 0.001,
+      "head_sizes": [
+        30,
+        10
+      ],
+      "bidirectional": true
+    }
+  ],
+  "timing_note": "training_seconds includes fitting and validation/checkpoint selection",
+  "packages": {
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.9.1",
+    "matplotlib": "3.11.2"
+  }
+}

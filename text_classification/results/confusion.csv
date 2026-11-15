@@ -1,0 +1,25 @@
+model,actual,predicted,count
+Majority baseline,ham,ham,676
+Majority baseline,ham,spam,0
+Majority baseline,spam,ham,94
+Majority baseline,spam,spam,0
+TF-IDF + naive Bayes,ham,ham,676
+TF-IDF + naive Bayes,ham,spam,0
+TF-IDF + naive Bayes,spam,ham,29
+TF-IDF + naive Bayes,spam,spam,65
+LSTM baseline,ham,ham,669
+LSTM baseline,ham,spam,7
+LSTM baseline,spam,ham,6
+LSTM baseline,spam,spam,88
+LSTM lower learning rate,ham,ham,672
+LSTM lower learning rate,ham,spam,4
+LSTM lower learning rate,spam,ham,12
+LSTM lower learning rate,spam,spam,82
+LSTM deeper head,ham,ham,675
+LSTM deeper head,ham,spam,1
+LSTM deeper head,spam,ham,14
+LSTM deeper head,spam,spam,80
+BiLSTM deeper head,ham,ham,670
+BiLSTM deeper head,ham,spam,6
+BiLSTM deeper head,spam,ham,13
+BiLSTM deeper head,spam,spam,81
