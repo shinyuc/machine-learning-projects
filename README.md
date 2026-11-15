@@ -11,7 +11,7 @@ and results.
 | [Decision trees](decision_trees/README.md) | Handwritten ID3, entropy, information gain, categorical prediction | Implemented |
 | [Vehicle classification](svm_vehicle_classification/README.md) | Handwritten HOG, scikit-learn linear/RBF SVC | Implemented |
 | [Neural network classification](neural_network_classification/README.md) | PyTorch MLP/CNN, activation and BatchNorm comparisons | Implemented |
-| [Object detection](object_detection/README.md) | Vehicle object detection | Planned |
+| [Object detection](object_detection/README.md) | SqueezeNet + YOLOv3, augmentation, AP50 | Implemented |
 | [Text classification](text_classification/README.md) | LSTM and BiLSTM text classification | Planned |
 
 ## Start with linear regression
@@ -129,6 +129,27 @@ The [module README](neural_network_classification/README.md) and
 [executed notebook](neural_network_classification/analysis.ipynb) explain the
 architectures, training loop, comparisons, and limitations.
 
+## Run the vehicle-detection project
+
+The main entry point is [object_detection/run_experiment.py](object_detection/run_experiment.py):
+
+```bash
+python -m pip install -e '.[detection,notebook,dev]'
+python -m object_detection.run_experiment
+```
+
+Prepare the authorized local vehicle images once using the
+[module README](object_detection/README.md#prepare-the-local-data-once).
+Photos and annotations are not distributed. This trains four SqueezeNet-based
+YOLOv3 comparisons and exports seven aggregate result files. The
+[notebook](object_detection/analysis.ipynb) reads these summaries by default;
+it can be viewed and rerun without the original images. Training uses the
+original real images locally, with exact duplicates kept in the same split.
+
+```bash
+python -m jupyterlab object_detection/analysis.ipynb
+```
+
 ## Repository layout
 
 ```text
@@ -161,7 +182,14 @@ neural_network_classification/
   plotting.py         # Learning curves, metrics, class counts, confusion matrix
   analysis.ipynb      # Executed explanation and experiment walkthrough
   results/            # Eight result files; no raw images or weights
-object_detection/     # Planned
+object_detection/
+  model.py            # SqueezeNet backbone and two YOLOv3 heads
+  yolo.py             # BSD-licensed decoding/loss adaptation and NMS
+  training.py         # SGD and validation checkpoint selection
+  evaluation.py       # Single-class detection AP50
+  run_experiment.py   # Main entry point: train four comparisons, evaluate, save
+  analysis.ipynb      # Executed aggregate analysis; optional local retraining
+  results/            # Seven summaries/figures, no photos or annotations
 text_classification/  # Planned
 tests/                # Numerical correctness and data-boundary tests
 pyproject.toml        # Dependencies and package configuration
@@ -190,7 +218,9 @@ python -m pip install --no-deps -e .
 
 This project's own copyrightable contributions are released under the
 [MIT License](LICENSE). This does not relicense third-party code, publications,
-datasets, or separately installed dependencies.
+datasets, or separately installed dependencies. The adapted
+`object_detection/yolo.py` uses BSD-3-Clause, with its full notice retained in
+[LICENSES/](LICENSES/); the root MIT license does not replace it.
 See [Sources and third-party material](THIRD_PARTY_NOTICES.md) and each module's
 references for implementation history, dataset attribution, and library
 documentation, including the history of the removed handwritten SVM solver.

@@ -3,7 +3,8 @@
 ## Repository license
 
 The [MIT License](LICENSE) applies to this project's own copyrightable
-contributions to the Python code, tests, and documentation. It does not
+contributions to the Python code, tests, and documentation, except for the
+explicitly BSD-licensed YOLO adaptation described below. It does not
 relicense third-party code, publications, datasets, or software dependencies.
 References below acknowledge sources; attribution is not a substitute for
 permission to redistribute or adapt protected material.
@@ -146,10 +147,67 @@ experiment; the data is not MNIST. Raw dataset files remain in the separately
 installed scikit-learn package. The public notebook and saved figures contain
 aggregate results, not copies of input digit images or pixel arrays.
 
+## Vehicle detection: YOLOv3
+
+### Licensed Python reference
+
+The decoding, target assignment, and loss in `object_detection/yolo.py` are
+adapted from `src/model.py` and `src/training.py` in Western Digital's
+[YOLOv3-in-PyTorch](https://github.com/westerndigitalcorporation/YOLOv3-in-PyTorch),
+revision `5944f2eae2b8e1e64c7c50cd42aa5e97e9d0e98c` (release branch).
+That revision provides a
+[BSD-3-Clause license](https://github.com/westerndigitalcorporation/YOLOv3-in-PyTorch/blob/5944f2eae2b8e1e64c7c50cd42aa5e97e9d0e98c/LICENSE),
+copyright 2019 Western Digital Corporation or its affiliates.
+The full notice is retained in the adapted file and in
+[the bundled license](LICENSES/western-digital-yolov3-BSD-3-Clause.txt).
+`object_detection/yolo.py`, including its modifications here, is distributed
+under BSD-3-Clause; the root MIT license does not replace it. The reference
+was chosen for its explicit source license, not merely its repository name.
+
+Changes include two detection scales instead of three, one vehicle class,
+dynamic grid strides for 227-pixel inputs, a sigmoid-space center loss,
+decoded pixel boxes for the background ignore mask, empty-target handling,
+and calls to torchvision for IoU and NMS. This is a small adaptation, not a
+copy of the upstream training application. Upstream photos, datasets, fonts,
+checkpoints, and pretrained weights are not bundled or downloaded by this code.
+
+The method reference is Redmon and Farhadi,
+[YOLOv3: An Incremental Improvement](https://arxiv.org/abs/1804.02767) (2018).
+The backbone is the separately installed torchvision
+[`squeezenet1_1`](https://docs.pytorch.org/vision/stable/models/generated/torchvision.models.squeezenet1_1.html)
+with `weights=None`. This project supplies the two-head architecture and
+experiment pipeline; it does not claim to have invented YOLOv3 or SqueezeNet.
+
+### Earlier experiment and local images
+
+The earlier local MATLAB experiment was based on MathWorks'
+[Object Detection Using YOLO v3 Deep Learning](https://www.mathworks.com/help/vision/ug/object-detection-using-yolo-v3-deep-learning.html).
+Its SqueezeNet/two-head design and experiment themes inform this version.
+The earlier helper files were reviewed to understand the task; they are not
+translated or redistributed here. The Python implementation uses the licensed
+reference above, PyTorch/torchvision APIs, and this project's data/evaluation
+code. This provenance statement is not a claim of clean-room development or
+a redistribution license for MathWorks materials.
+
+The original 295 photographs and vehicle annotations remain local. MathWorks
+identifies many images as coming from the Caltech Cars 1999 and 2001 datasets
+created by Pietro Perona and used with permission. That statement does not
+grant this repository permission to redistribute those photographs. The code
+requires separately supplied, authorized local data; it does not download or
+bundle images, the annotation table, or an example detector.
+
+The converter supports the earlier table layout and writes local JSON boxes
+and copied images under Git-ignored `data/`. The published notebook and result
+files contain aggregate metrics, learning/PR curves, and run settings; no
+photographs, pixel arrays, per-image annotations, or trained weights are
+exported. Original dataset terms still govern local use. This repository's
+MIT and BSD licenses grant no rights to those images or annotations.
+
 ## Software dependencies
 
 The code imports NumPy, pandas, Matplotlib, scikit-learn, and Pillow; the neural
-module additionally uses the optional PyTorch dependency. Jupyter/IPython
+module additionally uses the optional PyTorch dependency. Vehicle detection
+also uses torchvision and SciPy, installed separately. Jupyter/IPython
 provides the notebook environment, and pytest provides the test runner.
 Dependencies are declared in `pyproject.toml` and the tested environment is
 recorded in `requirements-lock.txt`.
@@ -160,6 +218,6 @@ repository. Their respective upstream licenses continue to apply.
 ## Scope
 
 These notices describe the implemented linear-regression, decision-tree,
-SVM image-classification, and neural-network modules. The other two modules
-contain planning descriptions only; their data and code sources will be
-documented when those modules are implemented.
+SVM image-classification, neural-network, and object-detection modules. The
+text-classification module contains a planning description only; its data and
+code sources will be documented when it is implemented.

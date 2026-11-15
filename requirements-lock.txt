@@ -1,4 +1,4 @@
-# Python 3.12 environment for the four implemented modules, including PyTorch.
+# Python 3.12 environment for the five implemented modules, including PyTorch/torchvision.
 anyio==4.16.0
 appnope==1.0.0
 argon2-cffi==25.1.0
@@ -106,6 +106,7 @@ terminado==0.18.1
 threadpoolctl==3.8.0
 tinycss2==1.5.1
 torch==2.15.0
+torchvision==0.29.2
 tornado==6.6.1
 traitlets==5.16.1
 typing_extensions==4.16.0

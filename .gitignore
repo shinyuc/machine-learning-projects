@@ -13,6 +13,9 @@ dist/
 data/
 datasets/
 checkpoints/
+*.pt
+*.pth
+*.weights
 /work/
 
 # Earlier MATLAB source, live scripts, and binary data are local references only.

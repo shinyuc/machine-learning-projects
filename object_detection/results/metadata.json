@@ -1,0 +1,112 @@
+{
+  "data_source": "Locally supplied vehicle images and bounding boxes; not redistributed",
+  "source_url": "https://www.mathworks.com/help/vision/ug/object-detection-using-yolo-v3-deep-learning.html",
+  "data_sha256": "b9d55be9d6fd11165c569f1a97337b2bfa85dd590c024701457b47b4b87e351b",
+  "images": 295,
+  "objects": 336,
+  "unique_pixel_groups": 246,
+  "split_counts": {
+    "train": 179,
+    "validation": 56,
+    "test": 60
+  },
+  "split_object_counts": {
+    "train": 206,
+    "validation": 62,
+    "test": 68
+  },
+  "split_rule": "GroupShuffleSplit by exact RGB pixel hash; approx 60/20/20; seed 42",
+  "seed": 42,
+  "device": "cpu",
+  "torch_threads": 2,
+  "epochs": 30,
+  "batch_size": 8,
+  "model": "SqueezeNet 1.1 + two YOLOv3 heads, 14x14 and 28x28; one vehicle class",
+  "parameters": 2499300,
+  "input_size": [
+    3,
+    227,
+    227
+  ],
+  "initialization": "from scratch, no pretrained weights",
+  "anchors": [
+    [
+      [
+        121.51176452636719,
+        139.84820556640625
+      ],
+      [
+        129.52352905273438,
+        148.96875
+      ],
+      [
+        137.53529357910156,
+        161.12945556640625
+      ]
+    ],
+    [
+      [
+        25.672607421875,
+        35.46875
+      ],
+      [
+        64.85714721679688,
+        66.88392639160156
+      ],
+      [
+        94.58332824707031,
+        102.35266876220703
+      ]
+    ]
+  ],
+  "anchor_fit": "six width-height IoU-distance median clusters, training boxes only",
+  "optimizer": "SGD",
+  "momentum": 0.9,
+  "weight_decay": 0.0005,
+  "gradient_clip_norm": 10,
+  "warmup_steps": 115,
+  "freeze_stem_epoch": 16,
+  "experiments": [
+    {
+      "name": "Baseline",
+      "learning_rate": 0.001,
+      "enhanced": false,
+      "freeze": false
+    },
+    {
+      "name": "Lower learning rate",
+      "learning_rate": 0.0005,
+      "enhanced": false,
+      "freeze": false
+    },
+    {
+      "name": "Enhanced augmentation",
+      "learning_rate": 0.001,
+      "enhanced": true,
+      "freeze": false
+    },
+    {
+      "name": "Augmentation + frozen stem",
+      "learning_rate": 0.001,
+      "enhanced": true,
+      "freeze": true
+    }
+  ],
+  "selection_rule": "highest validation AP50; earliest epoch/configuration on ties",
+  "selected_model": "Augmentation + frozen stem",
+  "ap": "all-points interpolated AP at IoU 0.5",
+  "nms_iou": 0.5,
+  "ap_score_floor": 0.001,
+  "max_detections_per_image": 100,
+  "precision_recall_score_cutoff": 0.5,
+  "packages": {
+    "torch": "2.15.0",
+    "torchvision": "0.29.2",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "pandas": "2.3.3",
+    "matplotlib": "3.11.2",
+    "pillow": "13.0.0"
+  }
+}

@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "machine-learning-projects"
 version = "0.1.0"
 description = "Reproducible machine learning implementations and experiments in Python"
-license = {file = "LICENSE"}
+license = {text = "MIT AND BSD-3-Clause"}
 requires-python = ">=3.10"
 dependencies = [
     "numpy>=1.26,<3",
@@ -18,12 +18,16 @@ dependencies = [
 
 [project.optional-dependencies]
 neural = ["torch>=2.6,<3"]
+detection = ["torch>=2.6,<3", "torchvision>=0.21,<1", "scipy>=1.14,<2"]
 notebook = ["jupyterlab>=4,<5", "ipykernel>=6,<8"]
 dev = ["pytest>=8,<10", "nbclient>=0.10,<1", "nbformat>=5.10,<6"]
 
 [tool.setuptools.packages.find]
-include = ["linear_regression*", "decision_trees*", "svm_vehicle_classification*", "neural_network_classification*"]
+include = ["linear_regression*", "decision_trees*", "svm_vehicle_classification*", "neural_network_classification*", "object_detection*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+
+[tool.setuptools]
+license-files = ["LICENSE", "LICENSES/*.txt"]
